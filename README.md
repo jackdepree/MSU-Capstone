@@ -23,12 +23,16 @@ Libraries and Modules:
 
 Data Preprocessing and Feature Engineering:
 
-* Function: encoder(df, target, window=1, cut=1, drop_timeline=True)
+### Function: encoder(df, target, window=1, cut=1, drop_timeline=True)
+
 This function processed the dataset to create the necessary features for the SVR model:
+
 - Rolling Window for Target: The function calculated the rolling mean of the target over a specified window to smooth out fluctuations and make the target more suitable for prediction.
 - Dropping Unnecessary Columns: The year column was dropped if present, as it was not needed for SVR modeling.
 - Feature Engineering: Additional features, such as the rolling average of revenue, quantity, and document_id, were added to capture recent trends.
-Data Scaling
+
+### Data Scaling
+
 - MinMaxScaler was used to scale the features (X) and target (y). This was important for the SVR model to work effectively, as scaling ensured that all features had similar ranges, which is vital for models like SVR.
 - The target (y) was scaled but then inverse transformed back to its original scale after predictions.
 
