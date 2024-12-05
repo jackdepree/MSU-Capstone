@@ -15,11 +15,11 @@ This code implemented a time-series prediction model using Support Vector Regres
 
 Libraries and Modules:
 
-- **Numpy**: Used for numerical operations like calculating performance metrics.
-- **Pandas**: Used for data manipulation and reading the dataset.
-- **Scikit-Learn**: Used for implementing the SVR model, data scaling, and evaluating the model.
-- **Matplotlib**: Used for data visualization (e.g., plotting actual vs predicted revenue).
-- **Metrics**: Mean Squared Error (MSE), Mean Absolute Error (MAE), R² Score, and others were used for evaluating the model performance.
+- Numpy: Used for numerical operations like calculating performance metrics.
+- Pandas: Used for data manipulation and reading the dataset.
+- Scikit-Learn: Used for implementing the SVR model, data scaling, and evaluating the model.
+- Matplotlib: Used for data visualization (e.g., plotting actual vs predicted revenue).
+- Metrics: Mean Squared Error (MSE), Mean Absolute Error (MAE), R² Score, and others were used for evaluating the model performance.
 
 Data Preprocessing and Feature Engineering:
 
