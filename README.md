@@ -1,13 +1,13 @@
-### MSU-Capstone
+# MSU-Capstone
 
 This repository will include all resources and work completed by Jack D, Tharun B, Shrinidhi K, and Yoensuk C.
 
-### Regression Methods
+# Regression Methods
 
 General Overview
 The project uses datasets 371, eba, fb5, and f3d to predict key performance indicators (KPIs) including revenue, invoice number, and customer count. Support Vector Machine (SVM) with an RBF kernel, Long Short-Term Memory (LSTM) network, XGBoost, and Lasso regression were applied for forecasting. These models were evaluated using metrics such as Mean Squared Error (MSE), Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), Mean Absolute Percentage Error (MAPE), Coefficient of Determination (R²), and Relative Absolute Error (RAE).
 
-### SVM code explanation
+# SVM code explanation
 
 Overview
 This code implemented a time-series prediction model using Support Vector Regression (SVR) to predict KPIs. The SVR model from the sklearn.svm library was used to forecast the target variable of four distribution companies based on historical data and additional features such as quantity, document_id, and others derived from the past few periods.
@@ -56,7 +56,7 @@ These metrics were calculated for each fold, and their averages were computed at
 Visualization
 Visualization was an integral part of understanding the model’s performance. The Matplotlib library was used to plot the actual versus predicted revenue for the last fold. The graph highlighted how well the model captured trends in the target variable, allowing for a visual comparison of its predictive capability.
 
-### SVM code 
+# SVM code 
 
 ## Revenue
 
@@ -67,7 +67,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.svm import SVR
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
-# Load the data
+### Load the data
 #file_path = "C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_371.csv"
 #file_path = "C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_eba.csv"
 file_path = "C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_fb5.csv"
@@ -75,7 +75,7 @@ file_path = "C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_fb5.csv"
 
 data = pd.read_csv(file_path)
 
-# Define the encoder function for feature-target creation
+### Define the encoder function for feature-target creation
 def encoder(df, target, window=1, cut=1, drop_timeline=True):
     # Ensure the DataFrame has a proper index
     df = df.reset_index(drop=True)
@@ -103,27 +103,27 @@ def encoder(df, target, window=1, cut=1, drop_timeline=True):
    
     return X, y
 
-# Prepare the data using the encoder
+### Prepare the data using the encoder
 X, y = encoder(data, 'revenue', window=1, cut=2, drop_timeline=True)
 
-# Scale the features and target
+### Scale the features and target
 scaler_X = MinMaxScaler()
 scaler_y = MinMaxScaler()
 X_scaled = scaler_X.fit_transform(X)
 y_scaled = scaler_y.fit_transform(y.values.reshape(-1, 1))
 
-# Function to calculate MAPE
+### Function to calculate MAPE
 def mean_absolute_percentage_error(y_true, y_pred):
     return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 
-# Function to calculate RAE (Relative Absolute Error)
+### Function to calculate RAE (Relative Absolute Error)
 def relative_absolute_error(y_true, y_pred):
     return np.sum(np.abs(y_true - y_pred)) / np.sum(np.abs(y_true - np.mean(y_true)))
 
-# Initialize KFold for cross-validation
+### Initialize KFold for cross-validation
 kf = KFold(n_splits=2, shuffle=True, random_state=42)
 
-# Lists to store performance metrics
+### Lists to store performance metrics
 mse_scores = []
 rmse_scores = []
 mae_scores = []
@@ -131,7 +131,7 @@ mape_scores = []
 r2_scores = []
 rae_scores = []
 
-# Perform cross-validation
+### Perform cross-validation
 for train_index, test_index in kf.split(X_scaled):
     X_train, X_test = X_scaled[train_index], X_scaled[test_index]
     y_train, y_test = y_scaled[train_index], y_scaled[test_index]
@@ -163,7 +163,7 @@ for train_index, test_index in kf.split(X_scaled):
     r2_scores.append(r2)
     rae_scores.append(rae)
 
-# Average performance metrics across folds
+### Average performance metrics across folds
 avg_mse = np.mean(mse_scores)
 avg_rmse = np.mean(rmse_scores)
 avg_mae = np.mean(mae_scores)
@@ -171,7 +171,7 @@ avg_mape = np.mean(mape_scores)
 avg_r2 = np.mean(r2_scores)
 avg_rae = np.mean(rae_scores)
 
-# Print performance metrics
+### Print performance metrics
 print(f"Average Mean Squared Error (MSE): {avg_mse}")
 print(f"Average Root Mean Squared Error (RMSE): {avg_rmse}")
 print(f"Average Mean Absolute Error (MAE): {avg_mae}")
@@ -179,7 +179,7 @@ print(f"Average Mean Absolute Percentage Error (MAPE): {avg_mape}")
 print(f"Average R² Score: {avg_r2}")
 print(f"Average Relative Absolute Error (RAE): {avg_rae}")
 
-# Visualize results from the last fold
+### Visualize results from the last fold
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(6, 3))
@@ -239,14 +239,14 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.svm import SVR
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
-# Load the dataset
+### Load the dataset
 file_path = "C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_371.csv"
 #file_path = "C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_eba.csv"
 #file_path = "C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_fb5.csv"
 #file_path = "C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_f3d.csv"
 data = pd.read_csv(file_path)
 
-# Define the encoder function for feature-target creation
+### Define the encoder function for feature-target creation
 def encoder(df, target, window=1, cut=1, drop_timeline=True):
     # Ensure the DataFrame has a proper index
     df = df.reset_index(drop=True)
@@ -273,27 +273,27 @@ def encoder(df, target, window=1, cut=1, drop_timeline=True):
     
     return X, y
 
-# Prepare the data using the encoder
+### Prepare the data using the encoder
 X, y = encoder(data, 'document_id', window=1, cut=2, drop_timeline=True)
 
-# Scale the features and target
+### Scale the features and target
 scaler_X = MinMaxScaler()
 scaler_y = MinMaxScaler()
 X_scaled = scaler_X.fit_transform(X)
 y_scaled = scaler_y.fit_transform(y.values.reshape(-1, 1))
 
-# Function to calculate MAPE
+### Function to calculate MAPE
 def mean_absolute_percentage_error(y_true, y_pred):
     return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 
-# Function to calculate RAE (Relative Absolute Error)
+### Function to calculate RAE (Relative Absolute Error)
 def relative_absolute_error(y_true, y_pred):
     return np.sum(np.abs(y_true - y_pred)) / np.sum(np.abs(y_true - np.mean(y_true)))
 
-# Initialize KFold for cross-validation
+### Initialize KFold for cross-validation
 kf = KFold(n_splits=2, shuffle=True, random_state=42)
 
-# Lists to store performance metrics
+### Lists to store performance metrics
 mse_scores = []
 rmse_scores = []
 mae_scores = []
@@ -301,7 +301,7 @@ mape_scores = []
 r2_scores = []
 rae_scores = []
 
-# Perform cross-validation
+### Perform cross-validation
 for train_index, test_index in kf.split(X_scaled):
     X_train, X_test = X_scaled[train_index], X_scaled[test_index]
     y_train, y_test = y_scaled[train_index], y_scaled[test_index]
@@ -333,7 +333,7 @@ for train_index, test_index in kf.split(X_scaled):
     r2_scores.append(r2)
     rae_scores.append(rae)
 
-# Average performance metrics across folds
+### Average performance metrics across folds
 avg_mse = np.mean(mse_scores)
 avg_rmse = np.mean(rmse_scores)
 avg_mae = np.mean(mae_scores)
@@ -341,7 +341,7 @@ avg_mape = np.mean(mape_scores)
 avg_r2 = np.mean(r2_scores)
 avg_rae = np.mean(rae_scores)
 
-# Print performance metrics
+### Print performance metrics
 print(f"Average Mean Squared Error (MSE): {avg_mse}")
 print(f"Average Root Mean Squared Error (RMSE): {avg_rmse}")
 print(f"Average Mean Absolute Error (MAE): {avg_mae}")
@@ -349,7 +349,7 @@ print(f"Average Mean Absolute Percentage Error (MAPE): {avg_mape}")
 print(f"Average R² Score: {avg_r2}")
 print(f"Average Relative Absolute Error (RAE): {avg_rae}")
 
-# Visualize results from the last fold
+### Visualize results from the last fold
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(6, 3))
@@ -410,15 +410,15 @@ from sklearn.svm import SVR
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 import matplotlib.pyplot as plt
 
-# Load the data
+### Load the data
 #file_path = "C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_371.csv"
 #file_path = "C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_eba.csv"
 file_path = "C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_fb5.csv"
 #file_path = "C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_f3d.csv"
 data = pd.read_csv(file_path)
 
-# Define the encoder function for feature-target creation
-# Modify the encoder function for the new target (customer_id)
+### Define the encoder function for feature-target creation
+### Modify the encoder function for the new target (customer_id)
 def encoder_customers(df, target, window=1, cut=1, drop_timeline=True):
     # Ensure the DataFrame has a proper index
     df = df.reset_index(drop=True)
@@ -446,20 +446,20 @@ def encoder_customers(df, target, window=1, cut=1, drop_timeline=True):
     
     return X, y
 
-# Prepare the data using the modified encoder
+### Prepare the data using the modified encoder
 X_customers, y_customers = encoder_customers(data, 'customer_id', window=1, cut=3, drop_timeline=True)
 
-# Scale the features and target
+### Scale the features and target
 scaler_X_customers = MinMaxScaler()
 scaler_y_customers = MinMaxScaler()
 X_scaled_customers = scaler_X_customers.fit_transform(X_customers)
 y_scaled_customers = scaler_y_customers.fit_transform(y_customers.values.reshape(-1, 1))
 
-# Function to calculate performance metrics (MAPE, etc.) remains the same
-# Perform KFold cross-validation
+### Function to calculate performance metrics (MAPE, etc.) remains the same
+### Perform KFold cross-validation
 kf = KFold(n_splits=2, shuffle=True, random_state=42)
 
-# Lists to store performance metrics
+### Lists to store performance metrics
 mse_scores_customers = []
 rmse_scores_customers = []
 mae_scores_customers = []
@@ -467,7 +467,7 @@ mape_scores_customers = []
 r2_scores_customers = []
 rae_scores_customers = []
 
-# Perform cross-validation for customer prediction
+### Perform cross-validation for customer prediction
 for train_index, test_index in kf.split(X_scaled_customers):
     X_train, X_test = X_scaled_customers[train_index], X_scaled_customers[test_index]
     y_train, y_test = y_scaled_customers[train_index], y_scaled_customers[test_index]
@@ -499,7 +499,7 @@ for train_index, test_index in kf.split(X_scaled_customers):
     r2_scores_customers.append(r2)
     rae_scores_customers.append(rae)
 
-# Average performance metrics across folds
+### Average performance metrics across folds
 avg_mse_customers = np.mean(mse_scores_customers)
 avg_rmse_customers = np.mean(rmse_scores_customers)
 avg_mae_customers = np.mean(mae_scores_customers)
@@ -507,7 +507,7 @@ avg_mape_customers = np.mean(mape_scores_customers)
 avg_r2_customers = np.mean(r2_scores_customers)
 avg_rae_customers = np.mean(rae_scores_customers)
 
-# Print performance metrics
+### Print performance metrics
 print(f"Average Mean Squared Error (MSE): {avg_mse_customers}")
 print(f"Average Root Mean Squared Error (RMSE): {avg_rmse_customers}")
 print(f"Average Mean Absolute Error (MAE): {avg_mae_customers}")
@@ -515,7 +515,7 @@ print(f"Average Mean Absolute Percentage Error (MAPE): {avg_mape_customers}")
 print(f"Average R² Score: {avg_r2_customers}")
 print(f"Average Relative Absolute Error (RAE): {avg_rae_customers}")
 
-# Visualize results from the last fold
+### Visualize results from the last fold
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(6, 3))
@@ -566,7 +566,7 @@ Average Mean Absolute Percentage Error (MAPE): 22.844856829202286
 Average R² Score: 0.310315394556936
 Average Relative Absolute Error (RAE): 0.7263318936664588
 
-### LSTM code explanation
+# LSTM code explanation
 
 Overview
 The codes implemented a time-series prediction model using a Long Short-Term Memory (LSTM) network to predict three KPIs. The LSTM model was part of the tensorflow.keras library (built on TensorFlow). The goal was to forecast the target variables of four distribution companies based on historical data and additional features such as quantity, document_id, and others derived from the past few periods.
@@ -623,7 +623,7 @@ These metrics were calculated and printed after training for each fold, and the 
 Visualization
 The Matplotlib library was used to compare actual and predicted values for the last fold. The visualization illustrated the model’s performance in capturing trends over time, providing insights into its temporal prediction capabilities.
 
-### LSTM code
+# LSTM code
 
 ## Revenue
 
@@ -636,22 +636,22 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
-# Load data
+### Load data
 #data = pd.read_csv("C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_371.csv")
 #data = pd.read_csv("C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_eba.csv")
 data = pd.read_csv("C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_fb5.csv")
 #data = pd.read_csv("C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_f3d.csv")
 
-# Define MAPE function with zero handling
+### Define MAPE function with zero handling
 def mean_absolute_percentage_error(y_true, y_pred):
     non_zero_mask = y_true != 0  # Avoid division by zero
     return np.mean(np.abs((y_true[non_zero_mask] - y_pred[non_zero_mask]) / y_true[non_zero_mask])) * 100
 
-# Define RAE function
+### Define RAE function
 def relative_absolute_error(y_true, y_pred):
     return np.sum(np.abs(y_true - y_pred)) / np.sum(np.abs(y_true - np.mean(y_true)))
 
-# Define the encoder function for feature-target creation
+### Define the encoder function for feature-target creation
 def encoder(df, target, window=1, cut=1, drop_timeline=True):
     # Ensure the DataFrame has a proper index
     df = df.reset_index(drop=True)
@@ -679,24 +679,24 @@ def encoder(df, target, window=1, cut=1, drop_timeline=True):
    
     return X, y
 
-# Prepare the data
+### Prepare the data
 X, y = encoder(data, 'revenue', window=1, cut=2, drop_timeline=True)
 
-# Scale the features but not the target
+### Scale the features but not the target
 scaler_X = MinMaxScaler()
 X_scaled = scaler_X.fit_transform(X)
 
-# Scale the target (y) but keep track of scaler for inverse transformation
+### Scale the target (y) but keep track of scaler for inverse transformation
 scaler_y = MinMaxScaler()
 y_scaled = scaler_y.fit_transform(y.values.reshape(-1, 1))
 
-# Reshape X for LSTM input (samples, timesteps, features)
+### Reshape X for LSTM input (samples, timesteps, features)
 X_scaled = X_scaled.reshape(X_scaled.shape[0], 1, X_scaled.shape[1])
 
-# Initialize KFold
+### Initialize KFold
 kf = KFold(n_splits=2, shuffle=True, random_state=42)
 
-# Lists to store performance metrics
+### Lists to store performance metrics
 mse_scores = []
 rmse_scores = []
 mae_scores = []
@@ -704,7 +704,7 @@ mape_scores = []
 r2_scores = []
 rae_scores = []
 
-# K-Fold Cross-Validation
+### K-Fold Cross-Validation
 for train_index, test_index in kf.split(X_scaled):
     X_train, X_test = X_scaled[train_index], X_scaled[test_index]
     y_train, y_test = y_scaled[train_index], y_scaled[test_index]  # Use scaled `y` for training
@@ -742,7 +742,7 @@ for train_index, test_index in kf.split(X_scaled):
     r2_scores.append(r2)
     rae_scores.append(rae)
 
-# Calculate average performance metrics
+### Calculate average performance metrics
 avg_mse = np.mean(mse_scores)
 avg_rmse = np.mean(rmse_scores)
 avg_mae = np.mean(mae_scores)
@@ -750,7 +750,7 @@ avg_mape = np.mean(mape_scores)
 avg_r2 = np.mean(r2_scores)
 avg_rae = np.mean(rae_scores)
 
-# Print metrics
+### Print metrics
 print(f"Average Mean Squared Error (MSE): {avg_mse}")
 print(f"Average Root Mean Squared Error (RMSE): {avg_rmse}")
 print(f"Average Mean Absolute Error (MAE): {avg_mae}")
@@ -758,7 +758,7 @@ print(f"Average Mean Absolute Percentage Error (MAPE): {avg_mape}")
 print(f"Average R² Score: {avg_r2}")
 print(f"Average Relative Absolute Error (RAE): {avg_rae}")
 
-# Visualize results from the last fold
+### Visualize results from the last fold
 plt.figure(figsize=(6, 3))
 plt.plot(y_test_original, label='Actual Revenue', color='blue', linestyle='--', marker='o', alpha=0.7)
 plt.plot(y_pred_original, label='Predicted Revenue', color='red', linestyle='-', marker='x', alpha=0.7)
@@ -818,22 +818,22 @@ from tensorflow.keras.layers import LSTM, Dense, Dropout
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import matplotlib.pyplot as plt
 
-# Load the dataset
+### Load the dataset
 data = pd.read_csv("C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_371.csv")
 #data = pd.read_csv("C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_eba.csv")
 #data = pd.read_csv("C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_fb5.csv")
 #data = pd.read_csv("C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_f3d.csv")
 
-# Define MAPE function with zero handling
+### Define MAPE function with zero handling
 def mean_absolute_percentage_error(y_true, y_pred):
     non_zero_mask = y_true != 0  # Avoid division by zero
     return np.mean(np.abs((y_true[non_zero_mask] - y_pred[non_zero_mask]) / y_true[non_zero_mask])) * 100
 
-# Define RAE function
+### Define RAE function
 def relative_absolute_error(y_true, y_pred):
     return np.sum(np.abs(y_true - y_pred)) / np.sum(np.abs(y_true - np.mean(y_true)))
 
-# Define the encoder function for feature-target creation
+### Define the encoder function for feature-target creation
 def encoder(df, target, window=1, cut=1, drop_timeline=True):
     # Ensure the DataFrame has a proper index
     df = df.reset_index(drop=True)
@@ -847,7 +847,7 @@ def encoder(df, target, window=1, cut=1, drop_timeline=True):
     if drop_timeline and 'year' in df.columns:
         df = df.drop('year', axis=1)
    
-   # Features (X) and target (y)
+   ### Features (X) and target (y)
     X = df.drop(['target', 'document_id'], axis=1)  # Remove 'document_id' as it is the target
     y = df['target']
    
@@ -861,24 +861,24 @@ def encoder(df, target, window=1, cut=1, drop_timeline=True):
    
     return X, y
 
-# Prepare the data for predicting the number of invoices
+### Prepare the data for predicting the number of invoices
 X, y = encoder(data, 'document_id', window=1, cut=2, drop_timeline=True)
 
-# Scale the features but not the target
+### Scale the features but not the target
 scaler_X = MinMaxScaler()
 X_scaled = scaler_X.fit_transform(X)
 
-# Scale the target (y) but keep track of scaler for inverse transformation
+### Scale the target (y) but keep track of scaler for inverse transformation
 scaler_y = MinMaxScaler()
 y_scaled = scaler_y.fit_transform(y.values.reshape(-1, 1))
 
-# Reshape X for LSTM input (samples, timesteps, features)
+### Reshape X for LSTM input (samples, timesteps, features)
 X_scaled = X_scaled.reshape(X_scaled.shape[0], 1, X_scaled.shape[1])
 
-# Initialize KFold
+### Initialize KFold
 kf = KFold(n_splits=2, shuffle=True, random_state=42)
 
-# Lists to store performance metrics
+### Lists to store performance metrics
 mse_scores = []
 rmse_scores = []
 mae_scores = []
@@ -886,7 +886,7 @@ mape_scores = []
 r2_scores = []
 rae_scores = []
 
-# K-Fold Cross-Validation
+### K-Fold Cross-Validation
 for train_index, test_index in kf.split(X_scaled):
     X_train, X_test = X_scaled[train_index], X_scaled[test_index]
     y_train, y_test = y_scaled[train_index], y_scaled[test_index]  # Use scaled `y` for training
@@ -924,7 +924,7 @@ for train_index, test_index in kf.split(X_scaled):
     r2_scores.append(r2)
     rae_scores.append(rae)
 
-# Calculate average performance metrics
+### Calculate average performance metrics
 avg_mse = np.mean(mse_scores)
 avg_rmse = np.mean(rmse_scores)
 avg_mae = np.mean(mae_scores)
@@ -932,7 +932,7 @@ avg_mape = np.mean(mape_scores)
 avg_r2 = np.mean(r2_scores)
 avg_rae = np.mean(rae_scores)
 
-# Print metrics
+### Print metrics
 print(f"Average Mean Squared Error (MSE): {avg_mse}")
 print(f"Average Root Mean Squared Error (RMSE): {avg_rmse}")
 print(f"Average Mean Absolute Error (MAE): {avg_mae}")
@@ -940,7 +940,7 @@ print(f"Average Mean Absolute Percentage Error (MAPE): {avg_mape}")
 print(f"Average R² Score: {avg_r2}")
 print(f"Average Relative Absolute Error (RAE): {avg_rae}")
 
-# Visualize results from the last fold
+### Visualize results from the last fold
 plt.figure(figsize=(6, 3))
 plt.plot(y_test_original, label='Actual Number of Invoices', color='blue', linestyle='--', marker='o', alpha=0.7)
 plt.plot(y_pred_original, label='Predicted Number of Invoices', color='red', linestyle='-', marker='x', alpha=0.7)
@@ -1000,22 +1000,22 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
-# Load data
+### Load data
 #data = pd.read_csv("C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_371.csv")
 #data = pd.read_csv("C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_eba.csv")
 #data = pd.read_csv("C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_fb5.csv")
 data = pd.read_csv("C:\\Users\\Jason\\Downloads\\Capstone Project\\transformed_f3d.csv")
 
-# Define MAPE function with zero handling
+### Define MAPE function with zero handling
 def mean_absolute_percentage_error(y_true, y_pred):
     non_zero_mask = y_true != 0  # Avoid division by zero
     return np.mean(np.abs((y_true[non_zero_mask] - y_pred[non_zero_mask]) / y_true[non_zero_mask])) * 100
 
-# Define RAE function
+### Define RAE function
 def relative_absolute_error(y_true, y_pred):
     return np.sum(np.abs(y_true - y_pred)) / np.sum(np.abs(y_true - np.mean(y_true)))
 
-# Define the encoder function for feature-target creation
+### Define the encoder function for feature-target creation
 def encoder(df, target, window=1, cut=1, drop_timeline=True):
     # Ensure the DataFrame has a proper index
     df = df.reset_index(drop=True)
@@ -1043,24 +1043,24 @@ def encoder(df, target, window=1, cut=1, drop_timeline=True):
    
     return X, y
 
-# Prepare the data
+### Prepare the data
 X, y = encoder(data, 'customer_id', window=1, cut=2, drop_timeline=True)
 
-# Scale the features but not the target
+### Scale the features but not the target
 scaler_X = MinMaxScaler()
 X_scaled = scaler_X.fit_transform(X)
 
-# Scale the target (y) but keep track of scaler for inverse transformation
+### Scale the target (y) but keep track of scaler for inverse transformation
 scaler_y = MinMaxScaler()
 y_scaled = scaler_y.fit_transform(y.values.reshape(-1, 1))
 
-# Reshape X for LSTM input (samples, timesteps, features)
+### Reshape X for LSTM input (samples, timesteps, features)
 X_scaled = X_scaled.reshape(X_scaled.shape[0], 1, X_scaled.shape[1])
 
-# Initialize KFold
+### Initialize KFold
 kf = KFold(n_splits=2, shuffle=True, random_state=42)
 
-# Lists to store performance metrics
+### Lists to store performance metrics
 mse_scores = []
 rmse_scores = []
 mae_scores = []
@@ -1068,7 +1068,7 @@ mape_scores = []
 r2_scores = []
 rae_scores = []
 
-# K-Fold Cross-Validation
+### K-Fold Cross-Validation
 for train_index, test_index in kf.split(X_scaled):
     X_train, X_test = X_scaled[train_index], X_scaled[test_index]
     y_train, y_test = y_scaled[train_index], y_scaled[test_index]  # Use scaled `y` for training
@@ -1106,7 +1106,7 @@ for train_index, test_index in kf.split(X_scaled):
     r2_scores.append(r2)
     rae_scores.append(rae)
 
-# Calculate average performance metrics
+### Calculate average performance metrics
 avg_mse = np.mean(mse_scores)
 avg_rmse = np.mean(rmse_scores)
 avg_mae = np.mean(mae_scores)
@@ -1114,7 +1114,7 @@ avg_mape = np.mean(mape_scores)
 avg_r2 = np.mean(r2_scores)
 avg_rae = np.mean(rae_scores)
 
-# Print metrics
+### Print metrics
 print(f"Average Mean Squared Error (MSE): {avg_mse}")
 print(f"Average Root Mean Squared Error (RMSE): {avg_rmse}")
 print(f"Average Mean Absolute Error (MAE): {avg_mae}")
@@ -1122,7 +1122,7 @@ print(f"Average Mean Absolute Percentage Error (MAPE): {avg_mape}")
 print(f"Average R² Score: {avg_r2}")
 print(f"Average Relative Absolute Error (RAE): {avg_rae}")
 
-# Visualize results from the last fold
+### Visualize results from the last fold
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(6, 3))
