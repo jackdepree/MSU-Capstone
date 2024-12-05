@@ -66,7 +66,7 @@ K-Fold Cross-Validation:
 - Mean Absolute Percentage Error (MAPE): Measured the percentage difference between predicted and actual values.
 - R² Score: Measured how well the predictions matched the actual data. A score of 1 indicated a perfect fit.
 - Relative Absolute Error (RAE): Measured the error relative to the mean of the actual values.
-- 
+ 
 ##### These metrics were calculated for each fold, and their averages were computed at the end.
 
 **Visualization:**
@@ -585,67 +585,77 @@ Average Relative Absolute Error (RAE): 0.7263318936664588
 
 # LSTM code explanation
 
-Overview:
+**Overview:**
 
 The codes implemented a time-series prediction model using a Long Short-Term Memory (LSTM) network to predict three KPIs. The LSTM model was part of the tensorflow.keras library (built on TensorFlow). The goal was to forecast the target variables of four distribution companies based on historical data and additional features such as quantity, document_id, and others derived from the past few periods.
 
-Libraries and Modules:
+**Libraries and Modules:**
 
-•	Numpy: Used for numerical operations like calculating metrics and transforming data.
-•	Pandas: Used for data manipulation and reading the dataset.
-•	Matplotlib: Used for data visualization (e.g., plotting actual vs predicted revenue).
-•	Scikit-Learn: Used for data scaling, splitting datasets, and evaluating models.
-•	TensorFlow (Keras): Used to build and train the LSTM model.
-•	Metrics: Mean Squared Error (MSE), Mean Absolute Error (MAE), and others were used for evaluating the model performance.
+- Numpy: Used for numerical operations like calculating metrics and transforming data.
+- Pandas: Used for data manipulation and reading the dataset.
+- Matplotlib: Used for data visualization (e.g., plotting actual vs predicted revenue).
+- Scikit-Learn: Used for data scaling, splitting datasets, and evaluating models.
+- TensorFlow (Keras): Used to build and train the LSTM model.
+- Metrics: Mean Squared Error (MSE), Mean Absolute Error (MAE), and others were used for evaluating the model performance.
 
-Data Preprocessing and Feature Engineering:
+**Data Preprocessing and Feature Engineering:**
 
 Function: encoder(df, target, window=1, cut=1, drop_timeline=True)
+
 This function processed the dataset to create the necessary features for the LSTM model:
-•	Rolling Window for Target: The function calculated the rolling mean of the target over a specified window to smooth out fluctuations and make the target more suitable for prediction.
-•	Dropping Unnecessary Columns: The year column was dropped if present, as it was not needed for LSTM modeling.
-•	Feature Engineering: Additional features, like the rolling average of revenue, quantity, and document_id, were added to capture recent trends.
 
-Data Scaling:
+- Rolling Window for Target: The function calculated the rolling mean of the target over a specified window to smooth out fluctuations and make the target more suitable for prediction.
+- Dropping Unnecessary Columns: The year column was dropped if present, as it was not needed for LSTM modeling.
+- Feature Engineering: Additional features, like the rolling average of revenue, quantity, and document_id, were added to capture recent trends.
 
-•	MinMaxScaler was used to scale the features (X) and target (y). This was important for neural networks to work effectively, as they perform better when the input data is scaled to a range [0, 1].
-•	The target (y) was also scaled but then inverse transformed back to its original scale after predictions.
+**Data Scaling:**
 
-LSTM Model Construction:
+- MinMaxScaler was used to scale the features (X) and target (y). This was important for neural networks to work effectively, as they perform better when the input data is scaled to a range [0, 1].
+- The target (y) was also scaled but then inverse transformed back to its original scale after predictions.
 
-- LSTM model consisted of three layers:
-LSTM Layer:
+**LSTM Model Construction:**
+
+LSTM model consisted of three layers:
+
+- LSTM Layer:
 This was the first layer of the model, where the LSTM units (128 units) were used to capture sequential dependencies in the time-series data, and the activation function used is ReLU.
-Dropout Layer:
-This layer followed the LSTM layer, with a dropout rate of 0.2. It helps prevent overfitting by randomly setting a fraction (20%) of input units to zero during training.
-Dense Layer:
-This was the final layer of the model, which was a fully connected (dense) layer with a single output unit to predict the target value
-- Input Shape: The input shape was (X_train.shape[1], X_train.shape[2]), where X_train.shape[1] was the number of timesteps (1 in this case) and X_train.shape[2] was the number of features.
 
-Model Training:
+- Dropout Layer:
+This layer followed the LSTM layer, with a dropout rate of 0.2. It helps prevent overfitting by randomly setting a fraction (20%) of input units to zero during training.
+
+- Dense Layer:
+This was the final layer of the model, which was a fully connected (dense) layer with a single output unit to predict the target value
+
+Input Shape: The input shape was (X_train.shape[1], X_train.shape[2]), where X_train.shape[1] was the number of timesteps (1 in this case) and X_train.shape[2] was the number of features.
+
+**Model Training:**
 
 The model was trained using the fit() method with a batch size of 16 and 20 epochs. The optimizer used was Adam, and the loss function was Mean Squared Error (MSE). 
-•	Epochs: The number of passes through the entire dataset during training.
-•	Batch Size: Defined the number of samples used in one iteration of training.
-*Since the model was trained on a local machine, it was executed on the CPU.
+- Epochs: The number of passes through the entire dataset during training.
+- Batch Size: Defined the number of samples used in one iteration of training.
 
-Cross-Validation:
+##### Since the model was trained on a local machine, it was executed on the CPU.
+
+**Cross-Validation:**
 
 K-Fold Cross-Validation:
+
 The dataset was split into 2 folds using KFold from scikit-learn. The model was trained on the training set and evaluated on the test set in each fold. Metrics were calculated for each fold, and the average performance metrics were displayed at the end.
 
-Model Evaluation:
+**Model Evaluation:**
 
 The model was evaluated using various metrics:
-•	Mean Squared Error (MSE): Measured the average squared difference between predicted and actual values. Lower values indicated better model performance.
-•	Root Mean Squared Error (RMSE): The square root of MSE, providing error in the same units as the target variable.
-•	Mean Absolute Error (MAE): Measured the average absolute difference between predicted and actual values.
-•	Mean Absolute Percentage Error (MAPE): Measured the percentage difference between predicted and actual values.
-•	R² Score: Measured how well the predictions matched the actual data (1 indicated perfect prediction).
-•	Relative Absolute Error (RAE): Measured the error relative to the mean of the actual values.
-These metrics were calculated and printed after training for each fold, and the averages were displayed.
 
-Visualization:
+- Mean Squared Error (MSE): Measured the average squared difference between predicted and actual values. Lower values indicated better model performance.
+- Root Mean Squared Error (RMSE): The square root of MSE, providing error in the same units as the target variable.
+- Mean Absolute Error (MAE): Measured the average absolute difference between predicted and actual values.
+- Mean Absolute Percentage Error (MAPE): Measured the percentage difference between predicted and actual values.
+- R² Score: Measured how well the predictions matched the actual data (1 indicated perfect prediction).
+- Relative Absolute Error (RAE): Measured the error relative to the mean of the actual values.
+
+##### These metrics were calculated and printed after training for each fold, and the averages were displayed.
+
+**Visualization:**
 
 The Matplotlib library was used to compare actual and predicted values for the last fold. The visualization illustrated the model’s performance in capturing trends over time, providing insights into its temporal prediction capabilities.
 
