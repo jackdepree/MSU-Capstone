@@ -15,49 +15,49 @@ This code implemented a time-series prediction model using Support Vector Regres
 
 Libraries and Modules:
 
-•   Numpy: Used for numerical operations like calculating performance metrics.
-•   Pandas: Used for data manipulation and reading the dataset.
-•	Scikit-Learn: Used for implementing the SVR model, data scaling, and evaluating the model.
-•	Matplotlib: Used for data visualization (e.g., plotting actual vs predicted revenue).
-•	Metrics: Mean Squared Error (MSE), Mean Absolute Error (MAE), R² Score, and others were used for evaluating the model performance.
+-•   Numpy: Used for numerical operations like calculating performance metrics.
+-•   Pandas: Used for data manipulation and reading the dataset.
+-•	Scikit-Learn: Used for implementing the SVR model, data scaling, and evaluating the model.
+-•	Matplotlib: Used for data visualization (e.g., plotting actual vs predicted revenue).
+-•	Metrics: Mean Squared Error (MSE), Mean Absolute Error (MAE), R² Score, and others were used for evaluating the model performance.
 
 Data Preprocessing and Feature Engineering:
 
-Function: encoder(df, target, window=1, cut=1, drop_timeline=True)
-This function processed the dataset to create the necessary features for the SVR model:
-•	Rolling Window for Target: The function calculated the rolling mean of the target over a specified window to smooth out fluctuations and make the target more suitable for prediction.
-•	Dropping Unnecessary Columns: The year column was dropped if present, as it was not needed for SVR modeling.
-•	Feature Engineering: Additional features, such as the rolling average of revenue, quantity, and document_id, were added to capture recent trends.
+-Function: encoder(df, target, window=1, cut=1, drop_timeline=True)
+-This function processed the dataset to create the necessary features for the SVR model:
+-•	Rolling Window for Target: The function calculated the rolling mean of the target over a specified window to smooth out fluctuations and make the target more suitable for prediction.
+-•	Dropping Unnecessary Columns: The year column was dropped if present, as it was not needed for SVR modeling.
+-•	Feature Engineering: Additional features, such as the rolling average of revenue, quantity, and document_id, were added to capture recent trends.
 Data Scaling
-•	MinMaxScaler was used to scale the features (X) and target (y). This was important for the SVR model to work effectively, as scaling ensured that all features had similar ranges, which is vital for models like SVR.
-•	The target (y) was scaled but then inverse transformed back to its original scale after predictions.
+-•	MinMaxScaler was used to scale the features (X) and target (y). This was important for the SVR model to work effectively, as scaling ensured that all features had similar ranges, which is vital for models like SVR.
+-•	The target (y) was scaled but then inverse transformed back to its original scale after predictions.
 
 SVR Model Construction:
 
 The SVR model was constructed using the Radial Basis Function (RBF) kernel, which is suitable for non-linear regression problems like this one.
 Key Hyperparameters:
-•	C (Regularization parameter): The penalty for misclassification (set to 100), controlling the trade-off between a smooth decision boundary and classifying the training points correctly.
-•	Gamma: The parameter for the kernel, controlling the influence of a single training example (set to 0.1).
-•	Epsilon: Defined a margin of tolerance where no penalty was given for errors (set to 0.1).
-‘svr_model = SVR(kernel='rbf', C=100, gamma=0.1, epsilon=0.1)’
+-•	C (Regularization parameter): The penalty for misclassification (set to 100), controlling the trade-off between a smooth decision boundary and classifying the training points correctly.
+-•	Gamma: The parameter for the kernel, controlling the influence of a single training example (set to 0.1).
+-•	Epsilon: Defined a margin of tolerance where no penalty was given for errors (set to 0.1).
+-‘svr_model = SVR(kernel='rbf', C=100, gamma=0.1, epsilon=0.1)’
 
 Model Training:
 
 K-Fold Cross-Validation:
-The model was trained and evaluated using K-fold cross-validation with 2 folds. This helped ensure that the model was generalized and did not overfit to a specific train-test split.
-The SVR model was trained using the fit() method on the training data and was used to predict on the test set:
-‘svr_model.fit(X_train, y_train.ravel())’
+-The model was trained and evaluated using K-fold cross-validation with 2 folds. This helped ensure that the model was generalized and did not overfit to a specific train-test split.
+-The SVR model was trained using the fit() method on the training data and was used to predict on the test set:
+-‘svr_model.fit(X_train, y_train.ravel())’
 
 Model Evaluation:
 
 Various performance metrics were calculated to evaluate the model's predictive accuracy:
-•	Mean Squared Error (MSE): Measured the average squared difference between predicted and actual values. Lower values indicated better performance.
-•	Root Mean Squared Error (RMSE): The square root of MSE, providing the error in the same units as the target variable.
-•	Mean Absolute Error (MAE): Measured the average absolute difference between predicted and actual values.
-•	Mean Absolute Percentage Error (MAPE): Measured the percentage difference between predicted and actual values.
-•	R² Score: Measured how well the predictions matched the actual data. A score of 1 indicated a perfect fit.
-•	Relative Absolute Error (RAE): Measured the error relative to the mean of the actual values.
-These metrics were calculated for each fold, and their averages were computed at the end.
+-•	Mean Squared Error (MSE): Measured the average squared difference between predicted and actual values. Lower values indicated better performance.
+-•	Root Mean Squared Error (RMSE): The square root of MSE, providing the error in the same units as the target variable.
+-•	Mean Absolute Error (MAE): Measured the average absolute difference between predicted and actual values.
+-•	Mean Absolute Percentage Error (MAPE): Measured the percentage difference between predicted and actual values.
+-•	R² Score: Measured how well the predictions matched the actual data. A score of 1 indicated a perfect fit.
+-•	Relative Absolute Error (RAE): Measured the error relative to the mean of the actual values.
+-These metrics were calculated for each fold, and their averages were computed at the end.
 
 Visualization:
 
