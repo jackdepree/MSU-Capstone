@@ -9,17 +9,20 @@ The project uses datasets 371, eba, fb5, and f3d to predict key performance indi
 
 # SVM code explanation
 
-Overview
+Overview:
+
 This code implemented a time-series prediction model using Support Vector Regression (SVR) to predict KPIs. The SVR model from the sklearn.svm library was used to forecast the target variable of four distribution companies based on historical data and additional features such as quantity, document_id, and others derived from the past few periods.
 
-Libraries and Modules
+Libraries and Modules:
+
 •	Numpy: Used for numerical operations like calculating performance metrics.
 •	Pandas: Used for data manipulation and reading the dataset.
 •	Scikit-Learn: Used for implementing the SVR model, data scaling, and evaluating the model.
 •	Matplotlib: Used for data visualization (e.g., plotting actual vs predicted revenue).
 •	Metrics: Mean Squared Error (MSE), Mean Absolute Error (MAE), R² Score, and others were used for evaluating the model performance.
 
-Data Preprocessing and Feature Engineering
+Data Preprocessing and Feature Engineering:
+
 Function: encoder(df, target, window=1, cut=1, drop_timeline=True)
 This function processed the dataset to create the necessary features for the SVR model:
 •	Rolling Window for Target: The function calculated the rolling mean of the target over a specified window to smooth out fluctuations and make the target more suitable for prediction.
@@ -29,7 +32,8 @@ Data Scaling
 •	MinMaxScaler was used to scale the features (X) and target (y). This was important for the SVR model to work effectively, as scaling ensured that all features had similar ranges, which is vital for models like SVR.
 •	The target (y) was scaled but then inverse transformed back to its original scale after predictions.
 
-SVR Model Construction
+SVR Model Construction:
+
 The SVR model was constructed using the Radial Basis Function (RBF) kernel, which is suitable for non-linear regression problems like this one.
 Key Hyperparameters:
 •	C (Regularization parameter): The penalty for misclassification (set to 100), controlling the trade-off between a smooth decision boundary and classifying the training points correctly.
@@ -37,13 +41,15 @@ Key Hyperparameters:
 •	Epsilon: Defined a margin of tolerance where no penalty was given for errors (set to 0.1).
 ‘svr_model = SVR(kernel='rbf', C=100, gamma=0.1, epsilon=0.1)’
 
-Model Training
+Model Training:
+
 K-Fold Cross-Validation:
 The model was trained and evaluated using K-fold cross-validation with 2 folds. This helped ensure that the model was generalized and did not overfit to a specific train-test split.
 The SVR model was trained using the fit() method on the training data and was used to predict on the test set:
 ‘svr_model.fit(X_train, y_train.ravel())’
 
-Model Evaluation
+Model Evaluation:
+
 Various performance metrics were calculated to evaluate the model's predictive accuracy:
 •	Mean Squared Error (MSE): Measured the average squared difference between predicted and actual values. Lower values indicated better performance.
 •	Root Mean Squared Error (RMSE): The square root of MSE, providing the error in the same units as the target variable.
@@ -53,7 +59,8 @@ Various performance metrics were calculated to evaluate the model's predictive a
 •	Relative Absolute Error (RAE): Measured the error relative to the mean of the actual values.
 These metrics were calculated for each fold, and their averages were computed at the end.
 
-Visualization
+Visualization:
+
 Visualization was an integral part of understanding the model’s performance. The Matplotlib library was used to plot the actual versus predicted revenue for the last fold. The graph highlighted how well the model captured trends in the target variable, allowing for a visual comparison of its predictive capability.
 
 # SVM code 
@@ -568,10 +575,12 @@ Average Relative Absolute Error (RAE): 0.7263318936664588
 
 # LSTM code explanation
 
-Overview
+Overview:
+
 The codes implemented a time-series prediction model using a Long Short-Term Memory (LSTM) network to predict three KPIs. The LSTM model was part of the tensorflow.keras library (built on TensorFlow). The goal was to forecast the target variables of four distribution companies based on historical data and additional features such as quantity, document_id, and others derived from the past few periods.
 
-Libraries and Modules
+Libraries and Modules:
+
 •	Numpy: Used for numerical operations like calculating metrics and transforming data.
 •	Pandas: Used for data manipulation and reading the dataset.
 •	Matplotlib: Used for data visualization (e.g., plotting actual vs predicted revenue).
@@ -579,18 +588,21 @@ Libraries and Modules
 •	TensorFlow (Keras): Used to build and train the LSTM model.
 •	Metrics: Mean Squared Error (MSE), Mean Absolute Error (MAE), and others were used for evaluating the model performance.
 
-Data Preprocessing and Feature Engineering
+Data Preprocessing and Feature Engineering:
+
 Function: encoder(df, target, window=1, cut=1, drop_timeline=True)
 This function processed the dataset to create the necessary features for the LSTM model:
 •	Rolling Window for Target: The function calculated the rolling mean of the target over a specified window to smooth out fluctuations and make the target more suitable for prediction.
 •	Dropping Unnecessary Columns: The year column was dropped if present, as it was not needed for LSTM modeling.
 •	Feature Engineering: Additional features, like the rolling average of revenue, quantity, and document_id, were added to capture recent trends.
 
-Data Scaling
+Data Scaling:
+
 •	MinMaxScaler was used to scale the features (X) and target (y). This was important for neural networks to work effectively, as they perform better when the input data is scaled to a range [0, 1].
 •	The target (y) was also scaled but then inverse transformed back to its original scale after predictions.
 
-LSTM Model Construction
+LSTM Model Construction:
+
 - LSTM model consisted of three layers:
 LSTM Layer:
 This was the first layer of the model, where the LSTM units (128 units) were used to capture sequential dependencies in the time-series data, and the activation function used is ReLU.
@@ -600,17 +612,20 @@ Dense Layer:
 This was the final layer of the model, which was a fully connected (dense) layer with a single output unit to predict the target value
 - Input Shape: The input shape was (X_train.shape[1], X_train.shape[2]), where X_train.shape[1] was the number of timesteps (1 in this case) and X_train.shape[2] was the number of features.
 
-Model Training
+Model Training:
+
 The model was trained using the fit() method with a batch size of 16 and 20 epochs. The optimizer used was Adam, and the loss function was Mean Squared Error (MSE). 
 •	Epochs: The number of passes through the entire dataset during training.
 •	Batch Size: Defined the number of samples used in one iteration of training.
 *Since the model was trained on a local machine, it was executed on the CPU.
 
-Cross-Validation
-K-Fold Cross-Validation
+Cross-Validation:
+
+K-Fold Cross-Validation:
 The dataset was split into 2 folds using KFold from scikit-learn. The model was trained on the training set and evaluated on the test set in each fold. Metrics were calculated for each fold, and the average performance metrics were displayed at the end.
 
-Model Evaluation
+Model Evaluation:
+
 The model was evaluated using various metrics:
 •	Mean Squared Error (MSE): Measured the average squared difference between predicted and actual values. Lower values indicated better model performance.
 •	Root Mean Squared Error (RMSE): The square root of MSE, providing error in the same units as the target variable.
@@ -620,7 +635,8 @@ The model was evaluated using various metrics:
 •	Relative Absolute Error (RAE): Measured the error relative to the mean of the actual values.
 These metrics were calculated and printed after training for each fold, and the averages were displayed.
 
-Visualization
+Visualization:
+
 The Matplotlib library was used to compare actual and predicted values for the last fold. The visualization illustrated the model’s performance in capturing trends over time, providing insights into its temporal prediction capabilities.
 
 # LSTM code
