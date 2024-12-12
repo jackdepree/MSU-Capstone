@@ -2,6 +2,158 @@
 
 This repository will include all resources and work completed by Jack D, Tharun B, Shrinidhi K, and Yoensuk C.
 
+# Regression Preprocessing
+
+Summarization of the performance of the companies on a per month basis.
+
+Summarization by Month:
+
+Grouping by Year and Month: The code groups the data by year and month. This allows for monthly aggregation of the data, which is useful for understanding trends and patterns over time.
+Aggregation of Key Metrics: For each month, the code calculates various summary statistics:
+Total Revenue: The sum of the revenue column for each month.
+Total Quantity: The sum of the quantity column for each month.
+Average Unit Price: The mean of the unit_price column for each month.
+Average Discount: The mean of the discount column for each month.
+Unique Item Numbers: The number of unique item_number values for each month.
+Unique Customer IDs: The number of unique customer_id values for each month.
+Unique Document IDs: The number of unique document_id values for each month.
+These aggregated metrics provide a concise summary of the data for each month, making it easier to analyze and interpret.
+
+Sequential Index Column: The code adds a new column named index with sequential numbers starting from 1. This index can be useful for:
+Referencing: Providing a simple reference number for each row in the summarized data.
+Visualization: Enhancing visualizations by adding a clear, sequential order to the data points.
+Reporting: Making the summarized data more readable and organized in reports.
+
+Calculating Skewness:
+```
+skew = df.groupby(['year', 'month']).agg({'revenue': 'skew', 'quantity': 'skew', 'unit_price': 'skew', 'discount': 'skew'}).sort_index()
+```
+
+Grouping by Year and Month: The code groups the data by year and month, allowing for monthly aggregation.
+Skewness Calculation: For each group (month), the code calculates the skewness of the revenue, quantity, unit_price, and discount columns.
+Skewness: Skewness is a measure of the asymmetry of the distribution of values. A skewness value can indicate whether the data is skewed to the left (negative skew) or right (positive skew).
+Sorting: The resulting DataFrame skew is sorted by the index, which is the combination of year and month.
+
+Renaming: The code renames the columns in the skew DataFrame to have a _skew suffix. This makes it clear that these columns represent the skewness of the original columns.
+Calculating Entropy:
+```
+def entropy(x):
+    p = np.array(x.value_counts(normalize=True))
+    return -np.sum(p * np.log2(p))
+
+entropy = df.groupby(['year', 'month']).agg({'revenue': entropy, 'quantity': entropy, 'unit_price': entropy, 'discount': entropy,
+                                             'customer_id': entropy, 'item_number': entropy, 'document_id': entropy}).sort_index()
+```
+
+Entropy Function: The code defines a custom function entropy to calculate the entropy of a column.
+Entropy: Entropy is a measure of uncertainty or randomness in the data. It quantifies the amount of information or disorder in the distribution of values.
+Value Counts: The function calculates the normalized value counts (probabilities) of the unique values in the column.
+Entropy Calculation: The entropy is calculated using the formula (-\sum p \log_2 p), where (p) is the probability of each unique value.
+Grouping by Year and Month: The code groups the data by year and month.
+Entropy Calculation: For each group (month), the code calculates the entropy of the revenue, quantity, unit_price, discount, customer_id, item_number, and document_id columns.
+Sorting: The resulting DataFrame entropy is sorted by the index, which is the combination of year and month.
+
+Identify High-Priced Purchases:
+```
+high_priced_mask = df['unit_price'] > df['unit_price'].quantile(0.90)
+df['high_priced'] = high_priced_mask
+```
+
+Quantile Calculation: The code calculates the 90th percentile (quantile 0.90) of the unit_price column. This value represents the price above which the top 10% of the prices fall.
+High-Priced Mask: A boolean mask is created to identify rows where the unit_price is greater than the 90th percentile. This mask is stored in the high_priced column.
+Purpose: This step identifies high-priced purchases, which can be useful for analyzing significant transactions and understanding pricing patterns.
+Identify High-Quantity Purchases:
+```high_quantity_mask = df['quantity'] > df['quantity'].quantile(0.90)
+df['high_quantity'] = high_quantity_mask
+```
+
+Quantile Calculation: The code calculates the 90th percentile (quantile 0.90) of the quantity column. This value represents the quantity above which the top 10% of the quantities fall.
+High-Quantity Mask: A boolean mask is created to identify rows where the quantity is greater than the 90th percentile. This mask is stored in the high_quantity column.
+Purpose: This step identifies high-quantity purchases, which can be useful for analyzing bulk purchases and understanding purchasing behavior.
+Group by Year and Month:
+```
+rare_purchases = df.groupby(['year', 'month']).agg({'high_priced': 'sum', 'high_quantity': 'sum'}).sort_index()
+```
+
+Grouping: The code groups the data by year and month, allowing for monthly aggregation.
+Aggregation: For each group (month), the code calculates the sum of the high_priced and high_quantity columns. This gives the total number of high-priced and high-quantity purchases for each month.
+Sorting: The resulting DataFrame rare_purchases is sorted by the index, which is the combination of year and month.
+
+Creating Baskets:
+```
+basket = df.groupby(['year', 'month', 'customer_id'])['item_description'].apply(list).reset_index()
+```
+
+Grouping: The code groups the data by year, month, and customer_id.
+Creating Baskets: For each group, it creates a list of item_description values, effectively creating a basket of items purchased by each customer in each month.
+Adding an Index Column:
+```
+months = basket.groupby(['year', 'month']).size().reset_index()
+months['index'] = range(1, len(months) + 1)
+```
+
+Grouping by Year and Month: The code groups the baskets by year and month to get the size of each group.
+Adding Index: It adds a sequential index to the grouped data.
+Merging Index Column to Baskets:
+```
+basket = basket.merge(months[['year', 'month', 'index']], on=['year', 'month'], how='left')
+basket = basket.drop(['year', 'month'], axis=1)
+basket = basket.rename(columns={'item_description': 'item_basket'})
+```
+
+Merging: The code merges the index column back to the baskets based on year and month.
+Dropping Columns: It drops the year and month columns as they are no longer needed.
+Renaming: It renames the item_description column to item_basket for clarity.
+Identifying High-Lift Rules:
+```
+rules['high_lift'] = rules['lift'] > rules['lift'].quantile(0.5)
+high_lift = rules[rules['high_lift']]
+```
+
+Create Baskets:
+
+Group data by year, month, and customer_id to create item baskets (item_description lists).
+Add Index Column:
+
+Add a sequential index to the grouped data.
+Merge Index Column:
+
+Merge the index back to the baskets and rename item_description to item_basket.
+Create Target Variable:
+
+Create a target variable (item_basket_target) representing future purchases by shifting the index.
+Merge Target Variable:
+
+Merge the target variable back to the original baskets.
+Sample Baskets:
+
+Take a random sample of 25% of the baskets for analysis.
+Flag Null Future Purchases:
+
+Create a flag to indicate whether there was no future purchase.
+Separate Recurrent and Null:
+
+Separate baskets into recurrent (with future purchases) and null (without future purchases).
+One-Hot Encode:
+
+One-hot encode the item_basket for both recurrent and null baskets.
+Value Counts:
+
+Calculate the sum of each item in the one-hot encoded baskets.
+Chi-Square Test:
+
+Create a contingency table and perform a chi-square test of independence to determine the significance of the association between items and recurrent/null purchases.
+Calculate Chi-Squared Statistic:
+
+Calculate the chi-squared statistic, degrees of freedom, and significance for each item.
+Identify Recurrent and One-Time Purchases:
+
+Identify items significantly more likely to be purchased recurrently or only once, and calculate the chance of recurrent purchase.
+Visualize Recurrent vs. Null Purchases:
+
+Create a scatter plot to visualize the relationship between recurrent and null purchases, with color indicating significance.
+
+Then, concatenate all of the new metrics to finalize the preprocessed data for the regression modeling
 # Regression Methods
 
 General Overview
